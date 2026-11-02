@@ -13,8 +13,18 @@
     <ProjectReference Include="..\OLK2IMAP.Core\OLK2IMAP.Core.csproj" />
   </ItemGroup>
 
-  <!-- Bundle the PyInstaller-built extractor (extractor/dist/olkextract/*) next to the app.
-       Build it first with extractor\build_extractor.bat, then build this project. -->
+  <!-- Dev fallback: always copy the Python extractor next to the app so the app can
+       run it via "python extractor\olkextract.py" when no bundled exe is present.
+       (Requires Python + ccl_chromium_reader installed; see extractor\requirements.txt.) -->
+  <ItemGroup>
+    <Content Include="$(SolutionDir)extractor\olkextract.py">
+      <Link>extractor\olkextract.py</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <!-- Preferred: bundle the PyInstaller-built standalone extractor (no Python needed
+       on the target). Build it first with extractor\build_extractor.bat. -->
   <ItemGroup Condition="Exists('$(SolutionDir)extractor\dist\olkextract')">
     <Content Include="$(SolutionDir)extractor\dist\olkextract\**\*">
       <Link>extractor\%(RecursiveDir)%(Filename)%(Extension)</Link>

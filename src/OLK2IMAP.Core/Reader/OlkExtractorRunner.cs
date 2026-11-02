@@ -20,6 +20,9 @@ public sealed class OlkExtractorRunner
 
     public string? DevScriptPath { get; set; }
 
+    /// <summary>Python launcher used for the dev fallback (py script). "py" or "python".</summary>
+    public string PythonExe { get; set; } = "python";
+
     public async Task<int> RunAsync(string olkProfileDir, string outDir, CancellationToken ct)
     {
         Directory.CreateDirectory(outDir);
@@ -27,19 +30,27 @@ public sealed class OlkExtractorRunner
         ProcessStartInfo psi;
         if (ExtractorExePath is not null && File.Exists(ExtractorExePath))
         {
+            _log("Extraktor (EXE): " + ExtractorExePath);
             psi = new ProcessStartInfo(ExtractorExePath);
             AddArgs(psi, olkProfileDir, outDir);
         }
         else if (DevScriptPath is not null && File.Exists(DevScriptPath))
         {
-            psi = new ProcessStartInfo("python");
+            _log("Extraktor (Python-Fallback): " + DevScriptPath);
+            psi = new ProcessStartInfo(PythonExe);
             psi.ArgumentList.Add(DevScriptPath);
             AddArgs(psi, olkProfileDir, outDir);
         }
         else
         {
             throw new FileNotFoundException(
-                "olkextract.exe nicht gefunden. Erwartet unter: " + ExtractorExePath);
+                "Extraktor nicht gefunden.\r\n" +
+                "Erwartet entweder die gebündelte EXE:\r\n  " + ExtractorExePath + "\r\n" +
+                "oder das Python-Skript:\r\n  " + DevScriptPath + "\r\n\r\n" +
+                "Lösung A (empfohlen): extractor\\build_extractor.bat ausführen (erzeugt olkextract.exe).\r\n" +
+                "Lösung B (Dev): Python installieren und\r\n" +
+                "  pip install \"git+https://github.com/cclgroupltd/ccl_chrome_indexeddb.git\"\r\n" +
+                "dann neu bauen (olkextract.py wird nach bin\\...\\extractor\\ kopiert).");
         }
 
         psi.RedirectStandardError = true;
@@ -50,7 +61,16 @@ public sealed class OlkExtractorRunner
         using var p = new Process { StartInfo = psi, EnableRaisingEvents = true };
         p.ErrorDataReceived += (_, e) => { if (e.Data is not null) _log(e.Data); };
         p.OutputDataReceived += (_, e) => { if (e.Data is not null) _log("[extract] " + e.Data); };
-        p.Start();
+        try
+        {
+            p.Start();
+        }
+        catch (System.ComponentModel.Win32Exception ex)
+        {
+            throw new InvalidOperationException(
+                $"Konnte '{psi.FileName}' nicht starten ({ex.Message}). " +
+                "Ist Python installiert und im PATH? Alternativ die EXE per build_extractor.bat bauen.", ex);
+        }
         p.BeginErrorReadLine();
         p.BeginOutputReadLine();
         await p.WaitForExitAsync(ct);
