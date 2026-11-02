@@ -48,15 +48,80 @@ def dec(b):
     return b if isinstance(b, str) else ""
 
 
+def _is_leveldb_dir(path):
+    return os.path.isdir(path) and (
+        os.path.isfile(os.path.join(path, "CURRENT")) or
+        bool(glob.glob(os.path.join(path, "*.ldb"))) or
+        bool(glob.glob(os.path.join(path, "*.log"))))
+
+
+def _find_leveldb(base):
+    """Find a *.indexeddb.leveldb directory anywhere under base. Prefer the
+    outlook.office.com store; accept the standard Olk profile layout or a
+    loose/extracted folder."""
+    # fast path: standard Olk profile layout
+    std = os.path.join(base, "EBWebView", "Default", "IndexedDB",
+                       "https_outlook.office.com_0.indexeddb.leveldb")
+    if _is_leveldb_dir(std):
+        return std
+    # the base itself may be a leveldb dir
+    if _is_leveldb_dir(base):
+        return base
+    # otherwise search
+    hits = []
+    for root, dirs, _ in os.walk(base):
+        for d in dirs:
+            if d.endswith(".indexeddb.leveldb") and _is_leveldb_dir(os.path.join(root, d)):
+                hits.append(os.path.join(root, d))
+        if len(hits) > 50:
+            break
+    if not hits:
+        return None
+    hits.sort(key=lambda p: (0 if "outlook.office.com" in p else 1, len(p)))
+    return hits[0]
+
+
+def _find_sibling_blob(leveldb):
+    if leveldb.endswith(".indexeddb.leveldb"):
+        cand = leveldb[:-len(".indexeddb.leveldb")] + ".indexeddb.blob"
+        if os.path.isdir(cand):
+            return cand
+    return None
+
+
+def _find_attachments(base):
+    direct = os.path.join(base, "Attachments")
+    if os.path.isdir(direct):
+        return direct
+    for root, dirs, _ in os.walk(base):
+        if "Attachments" in dirs:
+            return os.path.join(root, "Attachments")
+        # also accept a folder that already looks like the attachment store (ooa-*)
+        for d in dirs:
+            if d.startswith("ooa-"):
+                return root
+    return None
+
+
 def resolve_paths(args):
-    if args.profile:
+    if args.leveldb:
+        leveldb = args.leveldb
+        blob = args.blob or _find_sibling_blob(leveldb)
+        attachments = args.attachments
+    elif args.profile:
         base = args.profile
-        idb = os.path.join(base, "EBWebView", "Default", "IndexedDB")
-        leveldb = args.leveldb or os.path.join(idb, "https_outlook.office.com_0.indexeddb.leveldb")
-        blob = args.blob or os.path.join(idb, "https_outlook.office.com_0.indexeddb.blob")
-        attachments = args.attachments or os.path.join(base, "Attachments")
+        leveldb = _find_leveldb(base)
+        if not leveldb:
+            log(f"ERROR: no *.indexeddb.leveldb found under: {base}")
+            log("  Point --profile at the Olk folder (…\\Microsoft\\Olk) or a backup that "
+                "still contains EBWebView\\Default\\IndexedDB, or pass --leveldb directly.")
+            sys.exit(2)
+        blob = args.blob or _find_sibling_blob(leveldb)
+        attachments = args.attachments or _find_attachments(base)
     else:
-        leveldb, blob, attachments = args.leveldb, args.blob, args.attachments
+        log("ERROR: provide --profile or --leveldb.")
+        sys.exit(2)
+
     if not leveldb or not os.path.isdir(leveldb):
         log(f"ERROR: leveldb directory not found: {leveldb}")
         sys.exit(2)
