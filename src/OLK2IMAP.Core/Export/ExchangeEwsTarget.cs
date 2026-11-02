@@ -4,6 +4,8 @@ using MimeKit;
 // which collides with System.Threading.Tasks.Task. Alias so our async return
 // types resolve correctly.
 using Task = System.Threading.Tasks.Task;
+// "MimeContent" exists in both EWS and MimeKit -> disambiguate to the EWS one.
+using MimeContent = Microsoft.Exchange.WebServices.Data.MimeContent;
 
 namespace OLK2IMAP.Core.Export;
 

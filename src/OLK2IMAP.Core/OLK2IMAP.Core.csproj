@@ -7,11 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <!-- MIME + IMAP -->
-    <PackageReference Include="MimeKit" Version="4.8.0" />
-    <PackageReference Include="MailKit" Version="4.8.0" />
+    <!-- MIME + IMAP (patched versions; clears NU1902/NU1903 advisories) -->
+    <PackageReference Include="MimeKit" Version="4.13.0" />
+    <PackageReference Include="MailKit" Version="4.13.0" />
+    <!-- override vulnerable transitive System.Security.Cryptography.Pkcs 8.0.0 -->
+    <PackageReference Include="System.Security.Cryptography.Pkcs" Version="9.0.0" />
     <!-- Exchange Web Services (community .NET port of the EWS Managed API) -->
-    <PackageReference Include="Microsoft.Exchange.WebServices.NETStandard" Version="1.0.0" />
+    <PackageReference Include="Microsoft.Exchange.WebServices.NETStandard" Version="1.0.4" />
     <!-- PST writing without Outlook (commercial; license required for production) -->
     <PackageReference Include="Aspose.Email" Version="24.10.0" />
   </ItemGroup>
