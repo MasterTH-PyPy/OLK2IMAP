@@ -1,7 +1,7 @@
 <Project>
   <!-- Central version. Bump the patch on every commit (see README > Versionierung). -->
   <PropertyGroup>
-    <Version>0.1.0</Version>
+    <Version>0.1.1</Version>
     <Company>SonOG</Company>
     <Authors>Rudolf Kasper</Authors>
     <Product>OLK2IMAP</Product>

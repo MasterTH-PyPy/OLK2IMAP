@@ -1,5 +1,9 @@
 using Microsoft.Exchange.WebServices.Data;
 using MimeKit;
+// EWS defines its own "Task" item type in Microsoft.Exchange.WebServices.Data,
+// which collides with System.Threading.Tasks.Task. Alias so our async return
+// types resolve correctly.
+using Task = System.Threading.Tasks.Task;
 
 namespace OLK2IMAP.Core.Export;
 
