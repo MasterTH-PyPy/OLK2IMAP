@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <RootNamespace>OLK2IMAP.App</RootNamespace>
+    <AssemblyName>OLK2IMAP</AssemblyName>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\OLK2IMAP.Core\OLK2IMAP.Core.csproj" />
+  </ItemGroup>
+
+  <!-- Bundle the PyInstaller-built extractor (extractor/dist/olkextract/*) next to the app.
+       Build it first with extractor\build_extractor.bat, then build this project. -->
+  <ItemGroup Condition="Exists('$(SolutionDir)extractor\dist\olkextract')">
+    <Content Include="$(SolutionDir)extractor\dist\olkextract\**\*">
+      <Link>extractor\%(RecursiveDir)%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+</Project>

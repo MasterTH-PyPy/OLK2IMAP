@@ -1,0 +1,22 @@
+# Build output
+bin/
+obj/
+[Dd]ebug/
+[Rr]elease/
+*.user
+.vs/
+
+# Python extractor build
+extractor/build/
+extractor/dist/
+extractor/__pycache__/
+*.pyc
+*.spec.bak
+
+# Local secrets / configs
+*.olkcfg
+secrets.local.json
+
+# OS
+Thumbs.db
+.DS_Store

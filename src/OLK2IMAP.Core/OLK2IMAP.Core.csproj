@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <RootNamespace>OLK2IMAP.Core</RootNamespace>
+    <AssemblyName>OLK2IMAP.Core</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- MIME + IMAP -->
+    <PackageReference Include="MimeKit" Version="4.8.0" />
+    <PackageReference Include="MailKit" Version="4.8.0" />
+    <!-- Exchange Web Services (community .NET port of the EWS Managed API) -->
+    <PackageReference Include="Microsoft.Exchange.WebServices.NETStandard" Version="1.0.0" />
+    <!-- PST writing without Outlook (commercial; license required for production) -->
+    <PackageReference Include="Aspose.Email" Version="24.10.0" />
+  </ItemGroup>
+
+</Project>
