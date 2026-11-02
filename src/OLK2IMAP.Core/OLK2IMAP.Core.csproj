@@ -10,8 +10,9 @@
     <!-- MIME + IMAP. 4.16.0 fixes GHSA-9j88-vvj5-vhgr (CVE-2026-41319). -->
     <PackageReference Include="MimeKit" Version="4.16.0" />
     <PackageReference Include="MailKit" Version="4.16.0" />
-    <!-- override vulnerable transitive Pkcs; 9.0.21 fixes GHSA-846f-f764-76mx -->
-    <PackageReference Include="System.Security.Cryptography.Pkcs" Version="9.0.21" />
+    <!-- MimeKit 4.16.0 pulls Pkcs >= 10.0.0; 10.0.13 is the patched build for
+         GHSA-846f-f764-76mx (avoids the NU1605 downgrade from 9.0.21). -->
+    <PackageReference Include="System.Security.Cryptography.Pkcs" Version="10.0.13" />
     <!-- Exchange Web Services (community .NET port of the EWS Managed API) -->
     <PackageReference Include="Microsoft.Exchange.WebServices.NETStandard" Version="1.0.4" />
     <!-- PST writing without Outlook (commercial; license required for production) -->
