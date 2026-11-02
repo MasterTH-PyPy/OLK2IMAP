@@ -47,6 +47,7 @@ public sealed class MainForm : Form
     public MainForm()
     {
         Text = AppVersion.Display + "  -  new Outlook (Olk) -> IMAP / Exchange / MBOX / PST";
+        try { Icon = Icon.ExtractAssociatedIcon(Environment.ProcessPath ?? Application.ExecutablePath); } catch { /* ignore */ }
         Width = 770; Height = 760; StartPosition = FormStartPosition.CenterScreen;
         MinimumSize = new Size(770, 760);
 

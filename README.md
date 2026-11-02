@@ -1,7 +1,11 @@
-# OLK2IMAP
+# OLK2Any
 
 Rettet und exportiert die **Offline-Daten des „new Outlook" (Olk)** nach
-**IMAP / Exchange (EWS) / MBOX / PST**.
+**IMAP / Exchange (EWS) / MBOX / PST** – „Olk → Any".
+
+> Hinweis: Das Produkt/der EXE-Name ist **OLK2Any**; interne Namespaces und
+> Projektordner heißen aus Historie noch `OLK2IMAP.*`. Repo-/Namespace-Umbenennung
+> ist optional und separat.
 
 Das neue Outlook für Windows hat **keinen klassischen Mail-Store** (keine PST/OST).
 Seine Offline-Daten liegen in der WebView2-**IndexedDB** der OWA-Web-App:

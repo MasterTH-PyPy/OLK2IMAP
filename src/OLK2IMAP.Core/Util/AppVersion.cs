@@ -11,6 +11,6 @@ public static class AppVersion
         ?? Assembly.GetExecutingAssembly().GetName().Version?.ToString()
         ?? "0.0.0";
 
-    /// <summary>Short display string, e.g. "OLK2IMAP 0.1.0".</summary>
-    public static string Display => $"OLK2IMAP {Informational.Split('+')[0]}";
+    /// <summary>Short display string, e.g. "OLK2Any 0.1.0".</summary>
+    public static string Display => $"OLK2Any {Informational.Split('+')[0]}";
 }

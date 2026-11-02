@@ -5,8 +5,9 @@
     <TargetFramework>net10.0-windows</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
     <RootNamespace>OLK2IMAP.App</RootNamespace>
-    <AssemblyName>OLK2IMAP</AssemblyName>
+    <AssemblyName>OLK2Any</AssemblyName>
     <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>OLK2Any.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
