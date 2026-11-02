@@ -17,8 +17,8 @@ public sealed class MainForm : Form
     private readonly CheckBox _dryRun = new() { Text = "Dry-Run (nur simulieren)", Checked = true, AutoSize = true };
     private readonly CheckBox _inclDeleted = new() { Text = "Gelöschte einbeziehen", Checked = true, AutoSize = true };
     private readonly CheckBox _inclDrafts = new() { Text = "Entwürfe einbeziehen", Checked = true, AutoSize = true };
-    private readonly Button _btnExtract = new() { Text = "1. Extrahieren", Width = 130 };
-    private readonly Button _btnRun = new() { Text = "2. Übertragen", Width = 130 };
+    private readonly Button _btnExtract = new() { Text = "1. Extrahieren", Width = 160, Height = 30, AutoSizeMode = AutoSizeMode.GrowAndShrink };
+    private readonly Button _btnRun = new() { Text = "2. Übertragen", Width = 160, Height = 30, AutoSizeMode = AutoSizeMode.GrowAndShrink };
     private readonly ProgressBar _progress = new() { Width = 560, Style = ProgressBarStyle.Continuous };
     private readonly TextBox _log = new() { Multiline = true, ScrollBars = ScrollBars.Vertical, ReadOnly = true, Width = 720, Height = 220, Font = new Font("Consolas", 8.5f) };
 
@@ -77,9 +77,9 @@ public sealed class MainForm : Form
         y += 30;
 
         _btnExtract.Left = 110; _btnExtract.Top = y; Controls.Add(_btnExtract);
-        var hint = new Label { Text = "liest den Offline-Store -> EML + manifest.json", AutoSize = true, Left = 250, Top = y + 4, ForeColor = SystemColors.GrayText };
+        var hint = new Label { Text = "liest den Offline-Store -> EML + manifest.json", AutoSize = true, Left = 285, Top = y + 7, ForeColor = SystemColors.GrayText };
         Controls.Add(hint);
-        y += 40;
+        y += 46;
 
         L("Ziel:", y);
         _target.Left = 110; _target.Top = y; Controls.Add(_target);
